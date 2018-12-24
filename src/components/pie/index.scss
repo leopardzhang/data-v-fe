@@ -1,0 +1,32 @@
+.temp {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: fixed;
+}
+
+.current {
+	border: 1px solid #00baff;
+
+	&::before {
+		content: '';
+		display: block;
+		width: 1000vw;
+		height: 0;
+		border-top: 1px dotted #00baff;
+		position: absolute;
+		right: 0;
+		top: 0;
+	}
+
+	&::after {
+		content: '';
+		display: block;
+		height: 1000vh;
+		width: 0;
+		border-left: 1px dotted #00baff;
+		position: absolute;
+		left: 0;
+		bottom: 0;
+	}
+}
