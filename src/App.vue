@@ -115,7 +115,7 @@
             </el-row>
           </div>
           <div class="btn_box">
-            <div class="btn_item">保存</div>
+            <div class="btn_item" @click="submitData">保存</div>
           </div>
         </div>
       </el-aside>
@@ -215,7 +215,8 @@ export default {
       "setRes",
       "setCurrent",
       "setTitle",
-      "removeItem"
+      "removeItem",
+      "submitData"
     ]),
 
     addItem(type) {

@@ -140,6 +140,15 @@ const actions = {
 				index: 0
 			}
 		})
+	},
+
+	async submitData({
+		state,
+		commit
+	}) {
+		const data = state.res;
+
+		console.log(data);
 	}
 }
 
