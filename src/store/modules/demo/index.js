@@ -1,3 +1,8 @@
+import axios from 'axios';
+import {
+	beConfig
+} from '../../../configs/original';
+
 const state = {
 	num: 0,
 	res: {
@@ -140,15 +145,6 @@ const actions = {
 				index: 0
 			}
 		})
-	},
-
-	async submitData({
-		state,
-		commit
-	}) {
-		const data = state.res;
-
-		console.log(data);
 	}
 }
 

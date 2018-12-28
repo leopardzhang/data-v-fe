@@ -1,0 +1,1 @@
+export default 'http://10.64.3.33:8888/dist/addConfig';

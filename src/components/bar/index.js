@@ -52,7 +52,7 @@ export default {
 					height: _this.height
 				});
 			};
-			document.onmouseup = (e) => {
+			document.onmouseup = () => {
 				_this.$emit('setCurrent', {});
 				document.onmousemove = null;
 				document.onmouseup = null;

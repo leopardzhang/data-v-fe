@@ -115,7 +115,7 @@
             </el-row>
           </div>
           <div class="btn_box">
-            <div class="btn_item" @click="submitData">保存</div>
+            <div class="btn_item" @click="bandleSubmit">保存</div>
           </div>
         </div>
       </el-aside>
@@ -151,6 +151,8 @@ import canvasArea from "./components/canvasArea/index.vue";
 import { mapGetters, mapActions, mapState } from "vuex";
 
 import original from "./configs/original";
+import baseUrl from "./configs/baseUrl";
+import axios from "axios";
 
 export default {
   name: "app",
@@ -202,10 +204,10 @@ export default {
   created() {
     const _this = this;
     document.onkeyup = function() {
-        let key = window.event.keyCode;
-        if (key == 46) {
-            _this.removeItem();
-        }
+      let key = window.event.keyCode;
+      if (key == 46) {
+        _this.removeItem();
+      }
     };
   },
 
@@ -215,8 +217,7 @@ export default {
       "setRes",
       "setCurrent",
       "setTitle",
-      "removeItem",
-      "submitData"
+      "removeItem"
     ]),
 
     addItem(type) {
@@ -275,6 +276,27 @@ export default {
     handleSetTitle() {
       this.setTitle(this.title);
       this.dialogFormVisible = false;
+    },
+
+    bandleSubmit() {
+      const _this = this;
+      const groupid = location.href.split("?")[1].split("=")[1];
+
+      axios.get(baseUrl, {
+        params: {
+          code: _this.res,
+          groupid
+        }
+      }).then(res => {
+        if (res.data === 1) {
+          _this.$message({
+            message: "保存成功",
+            type: "success"
+          });
+        } else {
+          _this.$message.error('保存失败，请联系管理员或重试');
+        }
+      });
     }
   }
 };
@@ -425,59 +447,58 @@ export default {
   background-image: linear-gradient(-225deg, #00d3f1 0, #12b3ff 100%);
   box-shadow: 0 0 15px 0 rgba(0, 193, 220, 0.37);
 }
-.el-dialog{
-  background: #1f262b  !important;
+.el-dialog {
+  background: #1f262b !important;
   border-top: 2px solid #0095ff;
 
-  .el-dialog__title{
+  .el-dialog__title {
     color: #0095ff !important;
     font-size: 16px;
- }
- .el-dialog__body{
-   padding: 10px 20px 10px 20px !important;
- }
- .el-form-item__label{
-   font-size: 14px;
-   color: #fff;
- }
- .el-input__inner{
+  }
+  .el-dialog__body {
+    padding: 10px 20px 10px 20px !important;
+  }
+  .el-form-item__label {
+    font-size: 14px;
+    color: #fff;
+  }
+  .el-input__inner {
     background: #1b2227 !important;
     border-color: #606063 !important;
     color: #fff;
     height: 35px;
     line-height: 35px;
- }
- .el-input__inner:hover{
-    border-color: #5f8bc1  !important;
+  }
+  .el-input__inner:hover {
+    border-color: #5f8bc1 !important;
     color: #fff;
     height: 35px;
     line-height: 35px;
- }
- .el-button{
+  }
+  .el-button {
     padding: 8px 20px !important;
     font-size: 14px !important;
     border-radius: 20px !important;
- }
- .el-button--primary{
-   background:#108ae0 !important;
-   color: #fff !important;
-   border: none;
- }
-.el-button--primary:hover{
+  }
+  .el-button--primary {
+    background: #108ae0 !important;
+    color: #fff !important;
+    border: none;
+  }
+  .el-button--primary:hover {
     box-shadow: 0 0 8px 0 rgba(0, 193, 220, 0.37);
- }
-  .el-button--default{
-   background:#fff !important;
-   color: #293f52 !important;
-   border: none;
- }
- .el-button--default:hover{
-    box-shadow:0 0 8px 0 rgba(255, 255, 255, 0.37);
- }
+  }
+  .el-button--default {
+    background: #fff !important;
+    color: #293f52 !important;
+    border: none;
+  }
+  .el-button--default:hover {
+    box-shadow: 0 0 8px 0 rgba(255, 255, 255, 0.37);
+  }
 }
 
 .current {
   z-index: 10;
 }
-
 </style>

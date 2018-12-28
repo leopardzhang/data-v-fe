@@ -69,7 +69,6 @@ export default {
 			const option = {
 
 				title: {
-					text: 'Customized Pie',
 					left: 'center',
 					top: 20,
 					textStyle: {
