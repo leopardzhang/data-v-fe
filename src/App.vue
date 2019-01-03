@@ -115,13 +115,14 @@
             </el-row>
           </div>
           <div class="btn_box">
-            <div class="btn_item" @click="bandleSubmit">保存</div>
+            <div class="btn_item" @click="bandleSubmit(1)">保存</div>
+            <div class="btn_item" @click="bandleSubmit(0)">保存草稿</div>
           </div>
         </div>
       </el-aside>
       <el-container>
         <el-main>
-          <div class="canvas">
+          <div class="canvas" ref="canvas">
             <canvasArea :res="res"/>
           </div>
         </el-main>
@@ -151,8 +152,10 @@ import canvasArea from "./components/canvasArea/index.vue";
 import { mapGetters, mapActions, mapState } from "vuex";
 
 import original from "./configs/original";
+import scale from "./configs/scale";
 import baseUrl from "./configs/baseUrl";
 import axios from "axios";
+import html2canvas from "html2canvas";
 
 export default {
   name: "app",
@@ -203,6 +206,7 @@ export default {
 
   created() {
     const _this = this;
+    this.getOldData();
     document.onkeyup = function() {
       let key = window.event.keyCode;
       if (key == 46) {
@@ -217,7 +221,8 @@ export default {
       "setRes",
       "setCurrent",
       "setTitle",
-      "removeItem"
+      "removeItem",
+      "getOldData"
     ]),
 
     addItem(type) {
@@ -278,15 +283,49 @@ export default {
       this.dialogFormVisible = false;
     },
 
-    bandleSubmit() {
+    bandleSubmit(stat) {
       const _this = this;
       const groupid = location.href.split("?")[1].split("=")[1];
+      let params = {};
 
-      axios.get(baseUrl, {
-        params: {
+      if (/screenid/.test(location.href)) {
+        params = {
+          code: _this.res,
+          screenid: groupid
+        };
+      } else {
+        params = {
           code: _this.res,
           groupid
-        }
+        };
+      }
+      let url = "";
+      if (stat) {
+        url = "dist/addConfig";
+      } else {
+        url = "dist/putAdd";
+      }
+
+      const canvas = document.getElementById("app");
+
+      _this.setCurrent({
+        type: "",
+        index: 0
+      }).then(res => {
+        setTimeout(function(){
+          html2canvas(canvas, {
+            width: 1920 * scale,
+            height: 1080 * scale
+          }).then(function(img) {
+            var imgUrl = img.toDataURL("image/jpeg");
+            console.log(imgUrl);
+          });
+        });
+      }, 1000);
+        
+
+      axios.get(`${baseUrl}/${stat}`, {
+        params
       }).then(res => {
         if (res.data === 1) {
           _this.$message({
@@ -323,7 +362,6 @@ export default {
 .canvas {
   width: 1920px;
   height: 1080px;
-  background-image: url(./assets/bg.jpg);
   background-color: rgba(13, 42, 67, 0);
   transform: scale(0.43);
   position: absolute;
@@ -331,14 +369,15 @@ export default {
   top: 20px;
   left: 20px;
   transition: 0.2s all ease-in-out;
-  background-size: cover, contain;
-  background-position: center, right bottom;
-  background-repeat: no-repeat, no-repeat;
   box-shadow: rgba(0, 0, 0, 0.5) 0 0 30px 0;
 
   #app {
     width: 1920px;
     height: 1080px;
+    background-image: url(./assets/bg.jpg);
+    background-size: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
   }
 }
 .el-input-number--mini {
@@ -431,7 +470,9 @@ export default {
   border-left: 1px solid #2a98fa;
 }
 .btn_box {
-  padding: 13px 0 13px 86px;
+  padding: 13px 30px;
+  display: flex;
+  justify-content: space-around;
 }
 .btn_box .btn_item {
   width: 74px;
@@ -500,5 +541,15 @@ export default {
 
 .current {
   z-index: 10;
+}
+
+.el-message--success {
+  background-color: #1f262b !important;
+  border: none !important;
+
+  .el-icon-success,
+  .el-message__content {
+    color: #0095ff !important;
+  }
 }
 </style>

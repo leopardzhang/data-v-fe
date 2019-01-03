@@ -1,7 +1,5 @@
 import axios from 'axios';
-import {
-	beConfig
-} from '../../../configs/original';
+import baseUrl from "../../../configs/baseUrl";
 
 const state = {
 	num: 0,
@@ -21,7 +19,6 @@ const state = {
 const CHANGE_NUM = 'CHANGE_NUM';
 const GET_DATA = 'GET_DATA';
 const SET_CURRENT = 'SET_CURRENT';
-const SET_RES = 'SET_RES';
 const SET_TITLE = 'SET_TITLE';
 
 const mutations = {
@@ -88,7 +85,6 @@ const actions = {
 	 * 设置当前选中的单位的索引
 	 */
 	async setCurrent({
-		state,
 		commit
 	}, args) {
 		commit({
@@ -116,7 +112,6 @@ const actions = {
 	},
 
 	async setTitle({
-			state,
 			commit
 		}, args) {
 			commit({
@@ -144,6 +139,24 @@ const actions = {
 				type: '',
 				index: 0
 			}
+		})
+	},
+
+	async getOldData({
+		commit
+	}) {
+		const screenid = location.href.split("?")[1].split("=")[1];
+		await axios.get(`${baseUrl}/dist/queryById`, {
+			params: {
+				screenid
+			}
+		}).then(res => {
+			const data = res.data.code;
+
+			commit({
+				type: GET_DATA,
+				payload: JSON.parse(data)
+			});
 		})
 	}
 }

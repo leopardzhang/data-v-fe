@@ -53,7 +53,7 @@ export default {
 					height: _this.height
 				});
 			};
-			document.onmouseup = (e) => {
+			document.onmouseup = () => {
 				_this.$emit('setCurrent', {});
 				document.onmousemove = null;
 				document.onmouseup = null;
@@ -67,8 +67,8 @@ export default {
 			const chart = this.$refs.chart;
 			const myChart = this.$echarts.init(chart);
 			const option = {
-
 				title: {
+					text: '123',
 					left: 'center',
 					top: 20,
 					textStyle: {
