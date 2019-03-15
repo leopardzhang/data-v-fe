@@ -8,7 +8,13 @@ const state = {
 		bar: [],
 		lines: [],
 		pie: [],
-		circles: []
+		circles: [],
+		border: [],
+		tables: [],
+		boxPlot: [],
+		tree: [],
+		scatter: [],
+		radar: []
 	},
 	current: {
 		type: '',
@@ -152,7 +158,6 @@ const actions = {
 			}
 		}).then(res => {
 			const data = res.data.code;
-
 			commit({
 				type: GET_DATA,
 				payload: JSON.parse(data)

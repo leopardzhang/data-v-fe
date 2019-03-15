@@ -5,10 +5,20 @@
         <el-menu :default-openeds="['1']">
           <el-submenu index="1">
             <template slot="title">
-              <i class="el-icon-news"></i>添加图表
+              <i class="el-icon-picture"></i>添加图表
             </template>
             <el-menu-item-group v-for="item in chartClass" :key="item.type">
               <el-menu-item index="1-1" @click="addItem(item.type)">{{ item.text }}</el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>
+        </el-menu>
+        <el-menu>
+          <el-submenu index="1">
+            <template slot="title">
+              <i class="el-icon-news"></i>添加边框
+            </template>
+            <el-menu-item-group>
+              <el-menu-item index="1-1" @click="addItem('border')">添加边框</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
         </el-menu>
@@ -149,12 +159,18 @@ import Pie from "./components/pie/index.vue";
 import Lines from "./components/line/index.vue";
 import Circles from "./components/circle/index.vue";
 import canvasArea from "./components/canvasArea/index.vue";
+import Border from "./components/border/index.vue";
+import tables from "./components/table/index.vue";
+import BoxPlot from "./components/boxPlot/index.vue";
+import Tree from "./components/tree/index.vue";
+import Scatter from "./components/scatter/index.vue";
+import Radar from "./components/radar/index.vue";
 import { mapGetters, mapActions, mapState } from "vuex";
+import axios from "axios";
 
 import original from "./configs/original";
 import scale from "./configs/scale";
 import baseUrl from "./configs/baseUrl";
-import axios from "axios";
 import html2canvas from "html2canvas";
 
 export default {
@@ -177,6 +193,26 @@ export default {
         {
           type: "circles",
           text: "环状图"
+        },
+        {
+          type: "tables",
+          text: "列表"
+        },
+        {
+          type: "boxPlot",
+          text: "盒须图"
+        },
+        {
+          type: "tree",
+          text: "树形图"
+        },
+        {
+          type: "scatter",
+          text: "散点图"
+        },
+        {
+          type: "radar",
+          text: "雷达图"
         }
       ],
       dialogFormVisible: false,
@@ -201,7 +237,13 @@ export default {
     Pie,
     Lines,
     Circles,
-    canvasArea
+    Border,
+    canvasArea,
+    tables,
+    BoxPlot,
+    Tree,
+    Scatter,
+    Radar
   },
 
   created() {
@@ -285,7 +327,7 @@ export default {
 
     bandleSubmit(stat) {
       const _this = this;
-      const groupid = location.href.split("?")[1].split("=")[1];
+      const groupid = location.href.split("?")[1].split("=")[1] || null;
       let params = {};
 
       if (/screenid/.test(location.href)) {
@@ -318,27 +360,25 @@ export default {
             height: 1080 * scale
           }).then(function(img) {
             var imgUrl = img.toDataURL("image/jpeg");
-            console.log(imgUrl);
+            params.img = imgUrl;
+            axios.post(`${baseUrl}/${url}`, params).then(res => {
+              if (res.data === 1) {
+                _this.$message({
+                  message: "保存成功",
+                  type: "success"
+                });
+                window.opener.location.reload();
+                self.colse();
+              } else {
+                _this.$message.error('保存失败，请联系管理员或重试');
+              }
+            });
           });
         });
       }, 1000);
-        
-
-      axios.get(`${baseUrl}/${stat}`, {
-        params
-      }).then(res => {
-        if (res.data === 1) {
-          _this.$message({
-            message: "保存成功",
-            type: "success"
-          });
-        } else {
-          _this.$message.error('保存失败，请联系管理员或重试');
-        }
-      });
     }
   }
-};
+}
 </script>
 
 <style lang="scss">

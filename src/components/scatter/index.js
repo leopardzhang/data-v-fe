@@ -1,10 +1,12 @@
-import Vue from 'vue'
-import axios from 'axios'
+import echarts from 'echarts';
+import Vue from 'vue';
+import axios from 'axios';
 import scale from '../../configs/scale' // 伸缩比
 
-export default {
-    name: 'Tables',
+Vue.prototype.$echarts = echarts;
 
+export default {
+    name: 'Scatter',
     props: {
         width: Number,
         height: Number,
@@ -15,42 +17,14 @@ export default {
 
     data() {
         return {
-            table: [
-                {
-                    prop: 'name',
-                    name: '姓名'
-                },
-                {
-                    prop: 'date',
-                    name: '日期'
-                },
-                {
-                    prop: 'address',
-                    name: '地址'
-                }
-            ],
-            tableData: [{
-                date: '2016-05-02',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-            }, {
-                date: '2016-05-04',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1517 弄'
-            }, {
-                date: '2016-05-01',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1519 弄'
-            }, {
-                date: '2016-05-03',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1516 弄'
-            }]
+            positionX: '',
+            positionY: '',
+            current: false
         }
     },
 
     mounted() {
-
+        this.fnRest();
     },
 
     methods: {
@@ -85,20 +59,58 @@ export default {
                 document.onmouseup = null;
             };
         },
-
         handleMouseup() {
             this.current = false;
         },
 
         fnRest() {
+            const chart = this.$refs.chart;
+            const myChart = this.$echarts.init(chart);
+            const option = {
+                xAxis: {},
+                yAxis: {},
+                series: [{
+                    symbolSize: 20,
+                    data: [
+                        [10.0, 8.04],
+                        [8.0, 6.95],
+                        [13.0, 7.58],
+                        [9.0, 8.81],
+                        [11.0, 8.33],
+                        [14.0, 9.96],
+                        [6.0, 7.24],
+                        [4.0, 4.26],
+                        [12.0, 10.84],
+                        [7.0, 4.82],
+                        [5.0, 5.68]
+                    ],
+                    type: 'scatter'
+                }]
+            };
+
+            myChart.setOption(option, true);
+            myChart.resize();
+
             // axios.get(this.api).then((res) => {
-            //     option.xAxis[0].data = res.data.xAxisData;
             //     option.series[0].data = res.data.seriesData;
+            //     option.series[0].name = res.data.name;
+            //     option.title.text = res.data.title;
+
+            //     myChart.setOption(option, true);
+            //     myChart.resize();
             // });
         }
     },
 
     watch: {
+        width() {
+            this.fnRest();
+        },
+
+        height() {
+            this.fnRest();
+        },
+
         api() {
             this.fnRest();
         }

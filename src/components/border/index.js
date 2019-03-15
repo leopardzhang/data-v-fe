@@ -1,10 +1,7 @@
-import Vue from 'vue'
-import axios from 'axios'
 import scale from '../../configs/scale' // 伸缩比
 
 export default {
-    name: 'Tables',
-
+    name: 'Border',
     props: {
         width: Number,
         height: Number,
@@ -15,42 +12,10 @@ export default {
 
     data() {
         return {
-            table: [
-                {
-                    prop: 'name',
-                    name: '姓名'
-                },
-                {
-                    prop: 'date',
-                    name: '日期'
-                },
-                {
-                    prop: 'address',
-                    name: '地址'
-                }
-            ],
-            tableData: [{
-                date: '2016-05-02',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-            }, {
-                date: '2016-05-04',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1517 弄'
-            }, {
-                date: '2016-05-01',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1519 弄'
-            }, {
-                date: '2016-05-03',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1516 弄'
-            }]
+            positionX: '',
+            positionY: '',
+            current: false
         }
-    },
-
-    mounted() {
-
     },
 
     methods: {
@@ -85,22 +50,8 @@ export default {
                 document.onmouseup = null;
             };
         },
-
         handleMouseup() {
             this.current = false;
-        },
-
-        fnRest() {
-            // axios.get(this.api).then((res) => {
-            //     option.xAxis[0].data = res.data.xAxisData;
-            //     option.series[0].data = res.data.seriesData;
-            // });
-        }
-    },
-
-    watch: {
-        api() {
-            this.fnRest();
         }
     }
 }

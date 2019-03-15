@@ -4,6 +4,12 @@ import Pie from "../pie/index.vue";
 import Lines from "../line/index.vue";
 import Circles from "../circle/index.vue";
 import Tables from "../table/index.vue";
+import Border from "../border/index.vue";
+import BoxPlot from "../boxPlot/index.vue";
+import Tree from "../tree/index.vue";
+import Scatter from "../scatter/index.vue";
+import Radar from "../radar/index.vue";
+
 import { mapActions, mapGetters } from "vuex";
 
 export default {
@@ -20,7 +26,12 @@ export default {
     Pie,
     Lines,
     Circles,
-    Tables
+    Tables,
+    Border,
+    BoxPlot,
+    Tree,
+    Scatter,
+    Radar
   },
 
   computed: {
@@ -41,6 +52,32 @@ export default {
     return (
       <div id={"app"}>
         <div class={"title"}>{this.title}</div>
+        {this.res.border.map((item, index) => {
+          return (
+            <Pie
+              on-setPosition={data => {
+                this.upData({
+                  type: "border",
+                  index,
+                  data
+                });
+              }}
+              on-setCurrent={data => {
+                this.setCurrent({
+                  index,
+                  type: "border"
+                });
+              }}
+              class={{current: index == this.current.index && this.current.type == 'border'}}
+              index={index}
+              width={item.width}
+              height={item.height}
+              left={item.left}
+              top={item.top}
+              api={item.api}
+            />
+          );
+        })}
         {this.res.bar.map((item, index) => {
           return (
             <Bar
@@ -136,6 +173,136 @@ export default {
                 });
               }}
               class={{current: index == this.current.index && this.current.type == 'circles'}}
+              index={index}
+              width={item.width}
+              height={item.height}
+              left={item.left}
+              top={item.top}
+              api={item.api}
+            />
+          );
+        })}
+        {this.res.tables.map((item, index) => {
+          return (
+            <Tables
+              on-setPosition={data => {
+                this.upData({
+                  type: "tables",
+                  index,
+                  data
+                });
+              }}
+              on-setCurrent={data => {
+                this.setCurrent({
+                  index,
+                  type: "tables"
+                });
+              }}
+              class={{current: index == this.current.index && this.current.type == 'tables'}}
+              index={index}
+              width={item.width}
+              height={item.height}
+              left={item.left}
+              top={item.top}
+              api={item.api}
+            />
+          );
+        })}
+        {this.res.boxPlot.map((item, index) => {
+          return (
+            <BoxPlot
+              on-setPosition={data => {
+                this.upData({
+                  type: "boxPlot",
+                  index,
+                  data
+                });
+              }}
+              on-setCurrent={data => {
+                this.setCurrent({
+                  index,
+                  type: "boxPlot"
+                });
+              }}
+              class={{current: index == this.current.index && this.current.type == 'boxPlot'}}
+              index={index}
+              width={item.width}
+              height={item.height}
+              left={item.left}
+              top={item.top}
+              api={item.api}
+            />
+          );
+        })}
+        {this.res.tree.map((item, index) => {
+          return (
+            <Tree
+              on-setPosition={data => {
+                this.upData({
+                  type: "tree",
+                  index,
+                  data
+                });
+              }}
+              on-setCurrent={data => {
+                this.setCurrent({
+                  index,
+                  type: "tree"
+                });
+              }}
+              class={{current: index == this.current.index && this.current.type == 'tree'}}
+              index={index}
+              width={item.width}
+              height={item.height}
+              left={item.left}
+              top={item.top}
+              api={item.api}
+            />
+          );
+        })}
+        {this.res.scatter.map((item, index) => {
+          return (
+            <Scatter
+              on-setPosition={data => {
+                this.upData({
+                  type: "scatter",
+                  index,
+                  data
+                });
+              }}
+              on-setCurrent={data => {
+                this.setCurrent({
+                  index,
+                  type: "scatter"
+                });
+              }}
+              class={{current: index == this.current.index && this.current.type == 'scatter'}}
+              index={index}
+              width={item.width}
+              height={item.height}
+              left={item.left}
+              top={item.top}
+              api={item.api}
+            />
+          );
+        })}
+        {this.res.radar.map((item, index) => {
+          return (
+            <Radar
+              on-setPosition={data => {
+                this.upData({
+                  type: "radar",
+                  index,
+                  data
+                });
+              }}
+              on-setCurrent={data => {
+                this.setCurrent({
+                  index,
+                  type: "radar"
+                });
+              }}
+              class={{current: index == this.current.index && this.current.type == 'radar'}}
               index={index}
               width={item.width}
               height={item.height}
